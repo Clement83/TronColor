@@ -1,84 +1,85 @@
 
 
-void drwPlayer(Snake play)
+void drwPlayer(Snake cplay)
 {
+  gb.display.setColor(cplay.color);
   for(byte i=0;i<VITTESSE_SNAKE;i++)
   {
     for(byte j=0;j<VITTESSE_SNAKE;j++)
     {
-      gb.display.drawPixel(play.x+i,play.y+j);
+      gb.display.drawPixel(cplay.x+i,cplay.y+j);
     }
    }
 //  gb.display.fillRect(play.x,play.y,VITTESSE_SNAKE,VITTESSE_SNAKE);
 }
 
-void updPlayer(Snake *play)
+void updPlayer(Snake *cplay)
 {
-  if(play->dir == up)
-     play->y -= VITTESSE_SNAKE;
-  else if(play->dir == down)
-    play->y += VITTESSE_SNAKE;
-  else if(play->dir == left)
-    play->x -= VITTESSE_SNAKE;
-  else if(play->dir == right)
-    play->x += VITTESSE_SNAKE;
+  if(cplay->dir == dir_up)
+     cplay->y -= VITTESSE_SNAKE;
+  else if(cplay->dir == dir_down)
+    cplay->y += VITTESSE_SNAKE;
+  else if(cplay->dir == dir_left)
+    cplay->x -= VITTESSE_SNAKE;
+  else if(cplay->dir == dir_right)
+    cplay->x += VITTESSE_SNAKE;
     
-  if(gb.display.getPixel(play->x, play->y) == BLACK)
+  if(gb.display.getPixelColor(cplay->x, cplay->y) != WHITE)
   {
-      play->life = 0;
+      cplay->life = 0;
   }
 }
 
 
-void human(Snake *play)
+void human(Snake *cplay)
 {
   if(gb.buttons.pressed(BTN_UP))
   {
-    play->dir = up;
+    cplay->dir = dir_up;
   }
   else if(gb.buttons.pressed(BTN_DOWN))
   {
-    play->dir = down;
+    cplay->dir = dir_down;
   }
   else if(gb.buttons.pressed(BTN_LEFT))
   {
-    play->dir = left;
+    cplay->dir = dir_left;
   }
   else if(gb.buttons.pressed(BTN_RIGHT))
   {
-    play->dir = right;
+    cplay->dir = dir_right;
   }
 }
 
-void ia(Snake *play)
+void ia(Snake *cplay)
 {
   boolean isOk = false;
   uint8_t forceSortie = 0;
   
   if(random(0,40) == 0)
   {
-     play->dir = allDir[random(0,4)];
+     cplay->dir = allDir[random(0,4)];
   }
   
   do{
-    int8_t nextX = play->x;
-    int8_t nextY = play->y;
-    if(play->dir == up)
+    int8_t nextX = cplay->x;
+    int8_t nextY = cplay->y;
+    if(cplay->dir == dir_up)
        nextY -= VITTESSE_SNAKE;
-    else if(play->dir == down)
+    else if(cplay->dir == dir_down)
       nextY += VITTESSE_SNAKE;
-    else if(play->dir == left)
+    else if(cplay->dir == dir_left)
       nextX -= VITTESSE_SNAKE;
-    else if(play->dir == right)
+    else if(cplay->dir == dir_right)
       nextX += VITTESSE_SNAKE;
      
     
-    if(gb.display.getPixel(nextX, nextY) == WHITE)
+    if(gb.display.getPixelColor(nextX, nextY) == WHITE)
     {
         isOk = true;
     }
     else {
-      play->dir = allDir[random(0,4)];
+      cplay->dir = allDir[random(0,4)];
     }
   }while(!isOk && forceSortie++<10);
     
