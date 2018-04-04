@@ -76,12 +76,13 @@ void setup()
 void initPrograme()
 {
   state = gameMenu;
-  gb.setFrameRate(15);
+  gb.setFrameRate(25);
   difficulter = 15;
 }
 
 void goTitleScreen()
 {
+    gb.setFrameRate(25); 
     state = gameMenu;
 }
 
@@ -89,14 +90,23 @@ void initGame()
 {
   gb.display.clear();
   gb.display.persistence = true;
+  gb.display.setColor(LIGHTBLUE);
   gb.display.drawFastVLine(0, 0, gb.display.height());
+  gb.display.setColor(BLUE);
   gb.display.drawFastVLine(1, 0, gb.display.height());
+  gb.display.setColor(LIGHTBLUE);
   gb.display.drawFastVLine(78, 0, gb.display.height());
+  gb.display.setColor(BLUE);
   gb.display.drawFastVLine(79, 0, gb.display.height());
+  gb.display.setColor(LIGHTBLUE);
   gb.display.drawFastHLine(0, 0, gb.display.width());
+  gb.display.setColor(BLUE);
   gb.display.drawFastHLine(0, 1, gb.display.width());
+  gb.display.setColor(LIGHTBLUE);
   gb.display.drawFastHLine(0, 62, gb.display.width());
+  gb.display.setColor(BLUE);
   gb.display.drawFastHLine(0, 63, gb.display.width());
+  gb.display.setColor(BLACK);
   p1.x = 10;
   p1.y = 10;
   p1.dir = dir_right;
@@ -113,6 +123,7 @@ void loop()
 {
     if(gb.update())
     {
+      gb.lights.clear();
       gb.display.setColor(BLACK);
       if(gb.buttons.pressed(BTN_C))
       {
@@ -122,16 +133,7 @@ void loop()
       switch(state)
       {
         case gameMenu :
-        //multiplayer menu
-        switch(gb.menu(multiPlayerMenu,1)){
-          case 0: //single      
-            isPaused = false;
-            initDifficulty();
-            break;
-          default:
-            state = gameMenu;
-            break;
-         }
+          initDifficulty();
           initGame();
           state = game;
         break;
@@ -141,6 +143,7 @@ void loop()
             human(&p1);
             ia(&p2);
             updatePlayer();
+            backLightEffectPulse(1, RED);
           }
           
           drawPlayer();
